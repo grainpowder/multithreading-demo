@@ -58,30 +58,21 @@ class ProcessorBoundTask:
         ProcessorBoundTask.logger.info(f"PID : {pid}, TID : {tid}, Task ended successfully : {task_successful}")
 
 
-class SynchronousExecution:
-
-    @staticmethod
-    def execute(dimensions: List[int]) -> NoReturn:
-        start = time.time()
-        [ProcessorBoundTask.execute(dimension) for dimension in dimensions]
-        ProcessorBoundTask.logger.info(f"Elapsed time : {time.time() - start:.4f}")
+def synchronous_execute(dimensions: List[int]) -> NoReturn:
+    start = time.time()
+    [ProcessorBoundTask.execute(dimension) for dimension in dimensions]
+    ProcessorBoundTask.logger.info(f"Elapsed time : {time.time() - start:.4f} seconds")
 
 
-class MultithreadExecution:
-
-    @staticmethod
-    def execute(dimensions: List[int]) -> NoReturn:
-        start = time.time()
-        executor = ThreadPoolExecutor(max_workers=4)
-        list(executor.map(ProcessorBoundTask.execute, dimensions))
-        ProcessorBoundTask.logger.info(f"Elapsed time : {time.time() - start:.4f}")
+def multithread_execute(dimensions: List[int]) -> NoReturn:
+    start = time.time()
+    executor = ThreadPoolExecutor(max_workers=4)
+    list(executor.map(ProcessorBoundTask.execute, dimensions))
+    ProcessorBoundTask.logger.info(f"Elapsed time : {time.time() - start:.4f} seconds")
 
 
-class MultiprocessExecution:
-
-    @staticmethod
-    def execute(dimensions: List[int]) -> NoReturn:
-        start = time.time()
-        executor = ProcessPoolExecutor(max_workers=4)
-        list(executor.map(ProcessorBoundTask.execute, dimensions))
-        ProcessorBoundTask.logger.info(f"Elapsed time : {time.time() - start:.4f}")
+def multiprocess_execute(dimensions: List[int]) -> NoReturn:
+    start = time.time()
+    executor = ProcessPoolExecutor(max_workers=4)
+    list(executor.map(ProcessorBoundTask.execute, dimensions))
+    ProcessorBoundTask.logger.info(f"Elapsed time : {time.time() - start:.4f} seconds")
