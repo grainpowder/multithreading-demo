@@ -25,7 +25,7 @@ class SynchronousIOBoundTask:
     logger = make_logger("sync")
 
     @staticmethod
-    def fetch(client: httpx.Client, url: str, warmup: bool) -> str:
+    def fetch(client: httpx.Client, url: str, warmup: bool) -> httpx.Response:
         response = client.get(url, follow_redirects=True)
 
         pid = os.getpid()
@@ -34,7 +34,7 @@ class SynchronousIOBoundTask:
         if not warmup:
             SynchronousIOBoundTask.logger.info(f"PID : {pid}, TID : {tid}, status : {status_code}, url : {url}")
 
-        return response.text
+        return response
 
     @staticmethod
     def execute(warmup: bool):
@@ -49,7 +49,7 @@ class MultithreadIOBoundTask:
     logger = make_logger("multithread")
 
     @staticmethod
-    def fetch(parameter: Tuple[httpx.Client, str]) -> str:
+    def fetch(parameter: Tuple[httpx.Client, str]) -> httpx.Response:
         client, url = parameter
         response = client.get(url, follow_redirects=True)
 
@@ -58,7 +58,7 @@ class MultithreadIOBoundTask:
         status_code = response.status_code
         MultithreadIOBoundTask.logger.info(f"PID : {pid}, TID : {tid}, status : {status_code}, url : {url}")
 
-        return response.text
+        return response
 
     @staticmethod
     def execute():
@@ -74,7 +74,7 @@ class AsynchronousIOBoundTask:
     logger = make_logger("async")
 
     @staticmethod
-    async def fetch(client: httpx.AsyncClient, url: str):
+    async def fetch(client: httpx.AsyncClient, url: str) -> httpx.Response:
         response = await client.get(url, follow_redirects=True)
 
         pid = os.getpid()
@@ -82,7 +82,7 @@ class AsynchronousIOBoundTask:
         status_code = response.status_code
         AsynchronousIOBoundTask.logger.info(f"PID : {pid}, TID : {tid}, status : {status_code}, url : {url}")
 
-        return response.text
+        return response
 
     @staticmethod
     async def execute():
