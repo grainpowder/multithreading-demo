@@ -14,11 +14,11 @@
 아래와 같은 커맨드를 입력해 데모를 실행하기 위한 환경을 설정(MacOS 기준)
 
 ```shell
-cd python-gil-demo
+cd multithreading-demo
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-PYTHONPATH=$PWD/demo # set root directory as ./demo
+PYTHONPATH=$PWD/src # set root directory as ./src
 ```
 
 ### on docker
@@ -37,7 +37,7 @@ To be continued...
 
 
 ```shell
-python demo/main.py start cpu
+python src/demo/main.py start cpu
 ```
 
 CPU 바운드를 야기하는 task를 수행하는 데모를 실행하면 이를 반영하는 결과를 확인할 수 있다. 연산을 하나씩 순서대로 한 거랑 멀티스레딩이랑 소요 시간이 큰 차이가 없다. 오히려 멀티스레딩이 더 오래 걸리는 경우도 흔히 생긴다. 하지만 사람을 더 불러서(즉, 멀티 프로세싱으로) 처리하면 실행 속도가 확연히 개선되는 것을 확인할 수 있다.
@@ -49,7 +49,7 @@ IO 바운드로 인해 발생한 블로킹은 요청을 보내고 응답을 기�
 하지만 기다리는 시간에 다른 요청을 보내는 일련의 과정 자체를 하나의 일로 생각한다면 동시성을 더 효율적으로 구현할 수도 있다. 멀티스레딩은 switching이 필연적으로 수반되기 때문이다. 이 작업에 드는 시간까지도 절약하며 동시성을 구현하기 위해서는 비동기적(asynchronous) 프로그래밍을 사용한다. `await` 키워드를 사용해 루틴의 진입점과 탈출점을 여러 개 정의할 수 있는 코루틴을 `async def`로 정의해서 사용한다.
 
 ```shell
-python demo/main.py start io
+python src/demo/main.py start io
 ```
 
 IO 바운드를 야기하는 task를 수행하는 데모를 실행하면 이를 반영하는 결과를 확인할 수 있다. 요청을 하나 보내고 응답을 기다리는 방식보다, 멀티스레딩을 사용해 응답을 기다리는 시간을 효율적으로 사용하는 방식으로 task를 수행하는 것이 소요 시간이 더 짧았다. 하지만 코루틴을 사용한 비동기적 프로그래밍으로 이같은 동시성을 하나의 스레드에서 구현했을 때의 소요시간이 가장 짧음을 확인할 수 있다.
