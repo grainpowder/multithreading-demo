@@ -18,7 +18,7 @@ cd multithreading-demo
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-PYTHONPATH=$PWD/src # set root directory as ./src
+export PYTHONPATH=$PWD/src # set root directory as ./src
 ```
 
 ### on docker
