@@ -7,11 +7,12 @@ RUN yum update -y \
     && yum install -y python3 python3-pip
 
 ENV APP_PATH /opt/app
+ENV PYTHONPATH $APP_PATH/src
+COPY src $PYTHONPATH
 
-COPY $PWD/src $APP_PATH
-COPY requirements.txt $APP_PATH/requirements.txt
-
-# WORKDIR corresponds to cd command
 WORKDIR $APP_PATH
+COPY requirements.txt $APP_PATH/requirements.txt
 RUN pip3 install --no-cache-dir --upgrade pip \
     && pip3 install --no-cache-dir -r requirements.txt
+
+CMD /bin/bash
